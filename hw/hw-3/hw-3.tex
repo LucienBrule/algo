@@ -1,0 +1,163 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\title{CSCI 2300: Introduction to Algorithms \\
+\textbf{Homework 3}}
+\author{Lucien Brule \\
+brulel@rpi.edu}
+\date{January 30, 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Problem 1.1}
+\paragraph*{a.}
+We can show that $4^{1536} \equiv 9^{4824} \pmod{35}$ using Fermat's Little Theorem.
+Fermat's Little Theorem states that for any prime $p$ and any integer $a$ such that $gcd(a,p)=1$, we have $a^{p-1} \equiv 1 \pmod{p}$.
+Since $35 = 5 \cdot 7$ and both $5$ and $7$ are primes, we can use Fermat's Little Theorem on both $5$ and $7$ separately:
+\begin{align*}
+4^{4} &\equiv 1 \pmod 5 \
+9^{6} &\equiv 1 \pmod 7 \
+\end{align*}
+Now we can use the property of modular exponentiation
+\newline to simplify $4^{1536}$ and $9^{4824}$
+\begin{align*}
+4^{1536} &\equiv (4^{4})^{384} \pmod{35} \
+&\equiv 1^{384} \pmod{35} \
+&\equiv 1 \pmod{35} \
+\end{align*}
+\begin{align*}
+9^{4824} &\equiv (9^{6})^{804} \pmod{35} \
+&\equiv 1^{804} \pmod{35} \
+&\equiv 1 \pmod{35} \
+\end{align*}
+Finally,
+\begin{align*}
+4^{1536} &\equiv 9^{4824} \
+&\equiv 1 \pmod {35} \
+\end{align*}
+So, $4^{1536} \equiv 9^{4824} \pmod{35}$.
+
+\pagebreak
+
+\section*{Problem 1.2}
+
+
+Is $4^{1536} \equiv 9^{4824} \pmod{35}$?
+
+Since $35=5\cdot7$, we can use the Chinese Remainder Theorem to solve the congruence.
+
+\begin{align*}
+4^{1536} &\equiv 4^{1536}\bmod 5\cdot7 \\
+&\equiv 4^{1536}\bmod 5 \cdot 4^{1536}\bmod 7 \\
+&\equiv 1 \cdot 1 \\
+&\equiv 1 \pmod{35} \\
+\end{align*}
+
+\begin{align*}
+9^{4824} &\equiv 9^{4824}\bmod 5\cdot7 \\
+&\equiv 9^{4824}\bmod 5 \cdot 9^{4824}\bmod 7 \\
+&\equiv 1 \cdot 1 \\
+&\equiv 1 \pmod{35} \\
+\end{align*}
+
+Therefore, $4^{1536} \equiv 9^{4824} \pmod{35}$.
+
+The Chinese Remainder Theorem is a theorem that states that if we have a system of linear congruences, with moduli that are pairwise relatively prime, then this system has a unique solution modulo the product of the moduli.
+
+Applying this theorem to the problem above, we have:
+
+\begin{align*}
+4^{1536} &\equiv 1 \pmod 5 \
+4^{1536} &\equiv 1 \pmod 7 \
+9^{4824} &\equiv 1 \pmod 5 \
+9^{4824} &\equiv 1 \pmod 7
+\end{align*}
+
+Since the moduli $5$ and $7$ are relatively prime, we can find a solution for $4^{1536} \equiv 9^{4824} \pmod{35}$ using the Chinese Remainder Theorem. The unique solution is $4^{1536} \equiv 9^{4824} \equiv 1 \pmod{35}$.
+
+\pagebreak
+
+\section*{Problem 2}
+
+Solve for $x^{86}$ (mod 29). 
+
+Let's start with Fermat's Little Theorem:
+
+\begin{equation}
+x^{28} \equiv 1 (\text{mod} \ 29)
+\end{equation}
+
+Using this, we can simplify $x^{86}$:
+
+\begin{equation}
+x^{86} \equiv x^2 (\text{mod} \ 29)
+\end{equation}
+
+So, we only need to find $x^2 (\text{mod} \ 29)$.
+
+\begin{equation}
+x^2 \equiv 6 (\text{mod} \ 29)
+\end{equation}
+
+This is the same as:
+
+\begin{equation}
+x^2 \equiv 64 (\text{mod} \ 29)
+\end{equation}
+
+ergo:
+
+\begin{equation}
+x^2 - 64 \equiv (x - 8)(x + 8) \equiv 0 (\text{mod} \ 29)
+\end{equation}
+
+Thus,
+
+\begin{equation}
+x \equiv 8 (\text{mod} \ 29)
+\end{equation}
+
+\begin{equation}
+x \equiv 21 (\text{mod} \ 29)
+\end{equation}
+\pagebreak
+
+\section*{Problem 3}
+
+Prove that $\gcd(F_{n+1},F_n)=1$, for $n\ge1$, where $F_n$ is the $n$-th Fibonacci element.
+
+
+\textbf{Base case:}
+\begin{align*}
+\gcd(F_2,F_1)=\gcd(1,1)=1
+\end{align*}
+
+By induction\dots
+
+\textbf{Assumption:}
+\begin{align*}
+\gcd(F_n,F_{n-1})=1\text{ for some }n\ge1
+\end{align*}
+
+\textbf{Calculation:}
+\begin{align*}
+\gcd(F_{n+1},F_n) &= \gcd(F_{n+1},F_n)+\gcd(F_n,F_{n-1}) \\
+&= \gcd(F_n,F_{n-1})+\gcd(F_{n+1},F_{n-1}) \\
+&= \gcd(F_{n+1},F_{n-1})
+\end{align*}
+
+\textbf{Conclusion:}
+\begin{align*}
+\gcd(F_{n+1},F_n)=1
+\end{align*}
+
+
+\end{document}
+
+
+
