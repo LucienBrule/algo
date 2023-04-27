@@ -9,7 +9,7 @@
 \newcommand{\myname}{Lucien Brule}
 \newcommand{\professor}{Prof. Bulent Yener}
 \newcommand{\classname}{CSCI 2300: Introduction to Algorithms}
-\newcommand{\assignment}{Homework 1}
+\newcommand{\assignment}{Homework 4}
 \newcommand{\duedate}{\today}
 \title{\classname \\
 \textbf{\assignment} \\
@@ -30,25 +30,240 @@
 \begin{document}
 
 % Cover page
-\maketitle
-\thispagestyle{empty}
-\clearpage
+    \maketitle
+    \thispagestyle{empty}
+    \clearpage
 
 % Set page numbering to start on second page
-\pagenumbering{arabic}
+    \pagenumbering{arabic}
 
 % Small header on each subsequent page
-\pagestyle{fancy}
-\fancyhf{}
-\rhead{\myname}
-\lhead{\classname}
-\rfoot{\thepage}
+    \pagestyle{fancy}
+    \fancyhf{}
+    \rhead{\myname}
+    \lhead{\classname}
+    \rfoot{\thepage}
 
-% Content starts here
-\section{Problem 1}
-% Your solution to problem 1 goes here
 
-\section{Problem 2}
-% Your solution to problem 2 goes here
+    \section{Problem 1}
+
+    \textbf{Problem:} Compute tight big-Oh bounds for the following recurrences: \\
+    a. $T(n) = 8T\left(\frac{n}{4}\right) + O(n)$ \\
+    b. $T(n) = 2T\left(\frac{n}{4}\right) + O(\sqrt{n})$ \\
+    c. $T(n) = T(n - 4) + O(n^2)$ \\
+    d. $T(n) = T(\sqrt{n}) + O(n)$
+
+
+    \textbf{Part A:}
+
+    Using the Master Theorem, we have $a = 8$, $b = 4$, and $f(n) = O(n)$. Thus, we get $\log_b a = \log_4 8 = 3/2$. Since $n^{\log_b a} = n^{3/2}$ and $f(n) = O(n)$, we are in case 1 of the Master Theorem. Therefore, the tight big-Oh bound is:
+
+    $$
+    T(n) = O(n^{\log_b a}) = O(n^{3/2})
+    $$
+
+    \textbf{Part B:}
+
+    Using the Master Theorem, we have $a = 2$, $b = 4$, and $f(n) = O(\sqrt{n})$. Thus, we get $\log_b a = \log_4 2 = 1/2$. Since $n^{\log_b a} = \sqrt{n}$ and $f(n) = O(\sqrt{n})$, we are in case 2 of the Master Theorem. Therefore, the tight big-Oh bound is:
+
+    $$
+    T(n) = O(n^{\log_b a} \log n) = O(\sqrt{n} \log n)
+    $$
+
+    \textbf{Part C:}
+
+    For this recurrence, we can use the iterative method:
+
+    $$
+    T(n) = O(n^2) + T(n - 4) = O(n^2) + O((n - 4)^2) + T(n - 8) = \cdots
+    $$
+
+    After $k$ iterations, we have:
+
+    $$
+    T(n) = O(n^2) + O((n - 4)^2) + \cdots + O((n - 4k)^2) + T(n - 4k)
+    $$
+
+    Since we can have at most $\frac{n}{4}$ iterations, the tight big-Oh bound is:
+
+    $$
+    T(n) = O\left(\sum_{k=0}^{\frac{n}{4}} (n - 4k)^2\right) = O(n^3)
+    $$
+
+    \textbf{Part D:}
+
+    For this recurrence, we can use the substitution method. Let $m = \log_2 n$, so $n = 2^m$. Then, the recurrence becomes:
+
+    $$
+    S(m) = S(m - 1) + O(2^m)
+    $$
+
+    Solving this recurrence, we get:
+
+    $$
+    S(m) = O(2^m) + O(2^{m-1}) + \cdots + O(2^1) = O(2^m)
+    $$
+
+    Substituting back $n = 2^m$, we have:
+
+    $$
+    T(n) = O(n)
+    $$
+
+
+    \section{Problem 2}
+
+    \textbf{Problem:} Let A be an array of n integers, and let R be the range of values in A, i.e.,
+    $R = \max(A) - \min(A)$. Give an $O(n + R)$ time algorithm to sort all the values in A.
+
+    \textbf{Solution:}
+
+    We can use the Counting Sort algorithm to sort the values in A in $O(n + R)$ time. The algorithm is as follows:
+
+    \begin{enumerate}
+        \item Find the minimum and maximum values in A, i.e., $\min(A)$ and $\max(A)$.
+        \item Calculate the range R: $R = \max(A) - \min(A)$.
+        \item Initialize an array C of size $R+1$ with all elements set to 0.
+        \item Count the occurrences of each element in A and increment the corresponding entry in C.
+        \item Calculate the cumulative sum of C.
+        \item Create a new array B of size n for the sorted output.
+        \item Iterate through A in reverse order, and for each element, place it in the correct position in B using the values from C, and decrement the corresponding entry in C.
+    \end{enumerate}
+
+    The following is the pseudo code for the Counting Sort algorithm:
+
+    \begin{verbatim}
+function counting_sort(A):
+    min_A = min(A)
+    max_A = max(A)
+    R = max_A - min_A
+
+    C = [0] * (R + 1)
+
+    for a in A:
+        C[a - min_A] += 1
+
+    for i in range(1, len(C)):
+        C[i] += C[i - 1]
+
+    B = [0] * len(A)
+
+    for a in reversed(A):
+        B[C[a - min_A] - 1] = a
+        C[a - min_A] -= 1
+
+    return B
+    \end{verbatim}
+
+    The time complexity of this algorithm is $O(n + R)$, as each step takes at most $O(n)$ or $O(R)$ time.
+
+
+    \section{Problem 3}
+
+    \textbf{Problem:} Let A be an array of n distinct integers. Consider an algorithm to find the minimum value, where we pair up the elements, and retain the smaller of the values from each pair. This will result in an array of half the size (actually the resulting size will be $\lfloor \frac{n}{2} \rfloor$). We can then recursively apply the same approach, until we get a final array with just two elements. We compare these two values and return the minimum of those values as the answer. Answer the following questions: \\
+    a. How many comparisons are done in the above algorithm in the worst case. \\
+    b. Show how to modify/extend this method to find the second smallest element. \\
+    c. Prove that we can find the second smallest element in $n + \lceil\log(n)\rceil - 2$ comparisons in the worst case.
+
+
+    \textbf{Part A:}
+
+    In the first round, we perform $\lfloor \frac{n}{2} \rfloor$ comparisons. In the second round, we perform $\lfloor \frac{n}{4} \rfloor$ comparisons, and so on. The total number of comparisons can be calculated as follows:
+
+    $$
+    \sum_{i=1}^{\lceil\log_2(n)\rceil} \left\lfloor \frac{n}{2^i} \right\rfloor
+    $$
+
+    As we sum to $\lceil\log_2(n)\rceil$, the worst-case scenario is when $n$ is a power of 2. In that case, the expression becomes:
+
+    $$
+    \sum_{i=1}^{\log_2(n)} \frac{n}{2^i} = n\left(\frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \cdots\right)
+    $$
+
+    Since this is a geometric series with a sum of 1, the total number of comparisons in the worst case is:
+
+    $$
+    n - 1
+    $$
+
+    \textbf{Part B:}
+
+    To find the second smallest element, we need to remember the "losers" of each comparison with the smallest element during the tournament. We can store these elements in a separate array or list. After finding the smallest element, we need to find the minimum value among these "losers", which will be the second smallest element.
+
+    \textbf{Part C:}
+
+    Let's analyze the number of comparisons made to find the second smallest element. In the initial tournament, we made $n - 1$ comparisons to find the minimum value. After that, we need to compare the "losers" with the smallest element. Since there were $\lceil\log(n)\rceil - 1$ rounds of comparisons before reaching the final two elements, we have $\lceil\log(n)\rceil - 1$ "losers" to compare.
+    R
+    Thus, the total number of comparisons needed to find the second smallest element is:
+
+    $$
+    (n - 1) + (\lceil\log(n)\rceil - 1) = n + \lceil\log(n)\rceil - 2
+    $$
+
+    \section{Q2. (15 points)}
+
+\textbf{Part A:}
+
+\textbf{Problem:} Prove that a non-empty DAG (Directed Acyclic Graph) must have at least one source.
+
+\textbf{Proof:}
+
+Assume that there is a non-empty DAG without a source. In this case, every vertex has at least one incoming edge. Start at any vertex, and follow the incoming edges, creating a path. Since there are a finite number of vertices, we must eventually reach a vertex that we have already visited. This would create a cycle in the graph, which contradicts the assumption that the graph is acyclic. Therefore, a non-empty DAG must have at least one source.
+
+\textbf{Part B:}
+
+\textbf{Problem:} What is the time complexity of finding a source in a directed graph or to determine such a source does not exist if the graph is represented by its adjacency matrix? Describe the algorithm.
+
+\textbf{Solution:}
+
+The algorithm for finding a source in a directed graph represented by its adjacency matrix is as follows:
+
+1. Iterate through the columns of the adjacency matrix.
+2. For each column, check if all its elements are 0. If so, the corresponding vertex is a source.
+
+Here's the pseudo code for the algorithm:
+
+\begin{verbatim}
+function find_source(matrix):
+    for column in range(len(matrix)):
+        if all(matrix[row][column] == 0 for row in range(len(matrix))):
+            return column
+
+    return None
+\end{verbatim}
+
+The time complexity of this algorithm is $O(|V|^2)$, as we need to iterate through each element of the adjacency matrix.
+
+\textbf{Part C:}
+
+\textbf{Problem:} What is the time complexity of finding a source in a directed graph or to determine such a source does not exist if the graph is represented by its adjacency list? Describe the algorithm.
+
+\textbf{Solution:}
+
+The algorithm for finding a source in a directed graph represented by its adjacency list is as follows:
+
+1. Create an array with a length equal to the number of vertices, initializing all values to 0.
+2. Iterate through the adjacency list and increment the corresponding entry in the array for each incoming edge.
+3. Iterate through the array and find the first entry with a value of 0.
+
+Here's the pseudo code for the algorithm:
+
+\begin{verbatim}
+function find_source(adj_list):
+    in_degree = [0] * len(adj_list)
+
+    for vertex in adj_list:
+        for neighbor in adj_list[vertex]:
+            in_degree[neighbor] += 1
+
+    for vertex in range(len(in_degree)):
+        if in_degree[vertex] == 0:
+            return vertex
+
+    return None
+\end{verbatim}
+
+The time complexity of this algorithm is $O(|V| + |E|)$, as we need to iterate through the adjacency list and then through the in_degree array.
+
 
 \end{document}
